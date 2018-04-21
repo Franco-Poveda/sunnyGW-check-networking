@@ -3,15 +3,21 @@ package main
 import (
 	"fmt"
 	"html"
+	"log"
+	"net"
 	"strconv"
 
 	rainbow "github.com/raphamorim/go-rainbow"
 	telnet "github.com/reiver/go-telnet"
 )
 
+var domains = [...]string{"sunnyctl.povedaingenieria.com", "api.sunnyctl.io", "cloud.sunnyctl.io"}
+
 func main() {
+
 	tunnel()
 	broker()
+	lookup()
 }
 
 func tunnel() {
@@ -42,5 +48,11 @@ func broker() {
 		str := html.UnescapeString("&#" + strconv.Itoa(9989) + ";")
 		fmt.Println(str)
 
+	}
+}
+
+func lookup() {
+	for _, element := range domains {
+		log.Println(net.LookupHost(element))
 	}
 }
