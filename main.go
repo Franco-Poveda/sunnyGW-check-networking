@@ -52,6 +52,7 @@ func broker() {
 }
 
 func lookup() {
+	fmt.Printf("%s", rainbow.Bold(rainbow.Magenta("DNS resolution tests ")))
 	for _, element := range domains {
 		log.Println(net.LookupHost(element))
 	}
