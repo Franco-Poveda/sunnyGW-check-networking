@@ -6,22 +6,25 @@ import (
 	"log"
 	"net"
 	"strconv"
+	"sync"
 
-	rainbow "github.com/raphamorim/go-rainbow"
+	color "github.com/fatih/color"
 	telnet "github.com/reiver/go-telnet"
 )
 
 var domains = [...]string{"sunnyctl.povedaingenieria.com", "api.sunnyctl.io", "cloud.sunnyctl.io"}
 
 func main() {
-
-	tunnel()
-	broker()
-	lookup()
+	var wg sync.WaitGroup
+	wg.Add(3)
+	go tunnel(&wg)
+	go broker(&wg)
+	go lookup(&wg)
+	wg.Wait()
 }
 
-func tunnel() {
-	fmt.Printf("%s", rainbow.Bold(rainbow.Magenta("Conexion to tunnel server ")))
+func tunnel(waitGrp *sync.WaitGroup) {
+	color.Magenta("Conexion to tunnel server ")
 
 	conn, err := telnet.DialTo("54.207.26.75:22")
 	if nil != err {
@@ -34,10 +37,11 @@ func tunnel() {
 		fmt.Println(str)
 
 	}
+	defer waitGrp.Done()
 }
 
-func broker() {
-	fmt.Printf("%s", rainbow.Bold(rainbow.Magenta("Conexion to MQTT broker ")))
+func broker(waitGrp *sync.WaitGroup) {
+	color.Magenta("Conexion to MQTT broker ")
 
 	conn, err := telnet.DialTo("sunnyctl.povedaingenieria.com:1883")
 	if nil != err {
@@ -49,11 +53,15 @@ func broker() {
 		fmt.Println(str)
 
 	}
+	defer waitGrp.Done()
+
 }
 
-func lookup() {
-	fmt.Printf("%s", rainbow.Bold(rainbow.Magenta("DNS resolution tests ")))
+func lookup(waitGrp *sync.WaitGroup) {
+	color.Magenta("DNS resolution tests ")
 	for _, element := range domains {
 		log.Println(net.LookupHost(element))
 	}
+	defer waitGrp.Done()
+
 }
