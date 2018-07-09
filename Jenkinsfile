@@ -26,5 +26,10 @@ pipeline {
         sh './xcompile.sh'
       }
     }
+    stage('deliver') {
+      steps {
+        build 'deploy1'
+      }
+    }
   }
 }
