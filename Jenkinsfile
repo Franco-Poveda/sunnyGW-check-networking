@@ -11,7 +11,7 @@ pipeline {
 
             stage 'preTest'
             sh 'go version'
-            sh 'go get ./...'
+            sh 'go get'
 
           }
         }
