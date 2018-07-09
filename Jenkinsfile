@@ -21,5 +21,10 @@ pipeline {
 
       }
     }
+    stage('build') {
+      steps {
+        sh './xcompile.sh'
+      }
+    }
   }
 }
