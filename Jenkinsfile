@@ -3,6 +3,7 @@ pipeline {
   stages {
     stage('install') {
       steps {
+        sh 'pwd'
         script {
           def root = tool name: 'go10.3', type: 'go'
           withEnv(["GOROOT=${root}", "GOPATH=${JENKINS_HOME}/jobs/${JOB_NAME}/builds/${BUILD_ID}/", "PATH+GO=${root}/bin"]) {
@@ -11,7 +12,9 @@ pipeline {
 
             stage 'preTest'
             sh 'go version'
-            sh 'go get'
+            sh 'go get github.com/fatih/color'
+            sh 'go get github.com/reiver/go-telnet'
+
 
           }
         }
